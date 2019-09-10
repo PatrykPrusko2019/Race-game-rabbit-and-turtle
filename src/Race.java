@@ -19,12 +19,13 @@ public class Race {
     }
 
 
-
+    //start players
     public void playersStartingPosition() {
 
         for(int i = 0; i < array_70_positions_players.length; i++) {
             array_70_positions_players[i] = i + 1;
         }
+
         int counter = 0;
         for(int i  = 0; i < tabRabbitAndTurtle.length; i++) {
             for(int j = 0; j < tabRabbitAndTurtle[i].length; j++) {
@@ -32,13 +33,9 @@ public class Race {
                 if(i == 0 && j == 0) {
                     tabRabbitAndTurtle[i][j] = turtle.getTurtle() + rabbit.getRabbit();
                 } else if (i == tabRabbitAndTurtle.length-1 && j == tabRabbitAndTurtle[i].length-1 ) {
-                    tabRabbitAndTurtle[i][j] = "F ";
+                    tabRabbitAndTurtle[i][j] = "F";
                 } else {
-                    if(counter < 9) {
                         tabRabbitAndTurtle[i][j] = " " + array_70_positions_players[counter];
-                    } else {
-                        tabRabbitAndTurtle[i][j] = "" + array_70_positions_players[counter];
-                    }
                 }
                 counter++;
             }
@@ -56,8 +53,9 @@ public class Race {
             rabbit.checkMoveForRabbit(rand);
             finishRace = checkifFinishRace();
             cleanOfArray();
-            changeOfPositionOnArray(turtle.getActualPositionTurtle());
-            changeOfPositionOnArray(rabbit.getActualPositionRabbit());
+            checkPositionTwoPlayers();
+            turtle.changeOfPositionOnArrayTurtle(tabRabbitAndTurtle, rabbit, turtle);
+            rabbit.changeOfPositionOnArrayRabbit(tabRabbitAndTurtle, rabbit, turtle);
 
             checkThePosition(); //checks player positions as at the finish, it changes the value in the table
 
@@ -68,25 +66,37 @@ public class Race {
 
     }
 
+    // we set positions on the finish line
+    private void checkPositionTwoPlayers() {
+
+        if (turtle.getActualPositionTurtle() > 70) {
+            turtle.setActualPositionTurtle(70);
+        }
+        if(rabbit.getActualPositionRabbit() > 70) {
+            turtle.setActualPositionTurtle(70);
+        }
+    }
+
 
     //if last position of array is player(rabbit or turtle -> change value in array !!!!
     private void checkThePosition() {
-        if(turtle.getActualPositionTurtle() == 70) {
-            tabRabbitAndTurtle[6][9] = turtle.getTurtle() + " ";
-        } else if(rabbit.getActualPositionRabbit() == 70) {
-            tabRabbitAndTurtle[6][9] = rabbit.getRabbit() + " ";
-        } else if(turtle.getActualPositionTurtle() == 70 && rabbit.getActualPositionRabbit() == 70) {
+        if(turtle.getActualPositionTurtle() == 70 && rabbit.getActualPositionRabbit() == 70) {
             tabRabbitAndTurtle[6][9] = rabbit.getRabbit() + turtle.getTurtle();
+        } else if(rabbit.getActualPositionRabbit() == 70) {
+            tabRabbitAndTurtle[6][9] = rabbit.getRabbit();
+        } else if(turtle.getActualPositionTurtle() == 70){
+            tabRabbitAndTurtle[6][9] = turtle.getTurtle();
         }
     }
 
     private void checkWhoWinner() {
-        if(turtle.getActualPositionTurtle() == 70) {
-            System.out.println("\nWINNER IS TURTLE !!!!\n");
-        } else if (rabbit.getActualPositionRabbit() == 70) {
-            System.out.println("\nWINNER IS RABBIT !!!!\n");
-        } else  if(turtle.getActualPositionTurtle() == 70 && rabbit.getActualPositionRabbit() == 70){
+
+        if( tabRabbitAndTurtle[6][9] == rabbit.getRabbit() + turtle.getTurtle() ){
             System.out.println("\nWINNER IS RABBIT AND TURTLE !!!!\n");
+        } else if(rabbit.getActualPositionRabbit() == 70) {
+            System.out.println("\nWINNER IS RABBIT !!!!\n");
+        } else if(turtle.getActualPositionTurtle() == 70) {
+            System.out.println("\nWINNER IS TURTLE !!!!\n");
         }
     }
 
@@ -108,59 +118,6 @@ public class Race {
         }
     }
 
-    private void changeOfPositionOnArray(int player) { //player -> which rabbit or turtle
-        int counter = 1;
-
-        if( rabbit.getActualPositionRabbit() > 70 ) {
-            rabbit.setActualPositionRabbit(70);
-        }
-        else if  (turtle.getActualPositionTurtle() > 70) {
-            turtle.setActualPositionTurtle(70);
-        }
-
-        if(player == rabbit.getActualPositionRabbit()) { // turtle movement
-
-            for(int i = 0; i < tabRabbitAndTurtle.length; i++) {
-                for(int j = 0 ; j < tabRabbitAndTurtle[i].length; j++) {
-
-                    if(counter == rabbit.getActualPositionRabbit()) {
-                        if(tabRabbitAndTurtle[i][j] == turtle.getTurtle() + " ") {
-                            tabRabbitAndTurtle[i][j] = turtle.getTurtle() + rabbit.getRabbit();
-                        }else if(tabRabbitAndTurtle[i][j] == turtle.getTurtle() + rabbit.getRabbit()) {
-                            tabRabbitAndTurtle[i][j] = rabbit.getRabbit() + " ";
-                        }
-                        else {
-                            tabRabbitAndTurtle[i][j] = rabbit.getRabbit() + " ";
-                        }
-                    }
-
-                    counter++;
-                }
-            }
-
-        } else if( player == turtle.getActualPositionTurtle()) { //turtle movement
-            for(int i = 0; i < tabRabbitAndTurtle.length; i++) {
-                for(int j = 0 ; j < tabRabbitAndTurtle[i].length; j++) {
-
-                    if(counter == turtle.getActualPositionTurtle()) {
-                        if(tabRabbitAndTurtle[i][j] == rabbit.getRabbit() + " ") {
-                            tabRabbitAndTurtle[i][j] = turtle.getTurtle() + rabbit.getRabbit();
-                        } else if(tabRabbitAndTurtle[i][j] == turtle.getTurtle() + rabbit.getRabbit()) {
-                            tabRabbitAndTurtle[i][j] = turtle.getTurtle() + " ";
-                        }
-                        else {
-                            tabRabbitAndTurtle[i][j] = turtle.getTurtle() + " ";
-                        }
-                    }
-
-                    counter++;
-                }
-            }
-        }
-
-
-    }
-
     private boolean checkifFinishRace() {
         if(turtle.getActualPositionTurtle() >= 70 || rabbit.getActualPositionRabbit() >= 70) {
             return true; //end of the race
@@ -176,7 +133,11 @@ public class Race {
 
         for(int i = 0; i < tabRabbitAndTurtle.length; i++) {
             for(int j = 0; j < tabRabbitAndTurtle[i].length; j++) {
-                System.out.printf("|%s|\t" , tabRabbitAndTurtle[i][j]);
+                if( (tabRabbitAndTurtle[i][j] == turtle.getTurtle()) || (tabRabbitAndTurtle[i][j] == rabbit.getRabbit()) ) {
+                    System.out.printf("|%s |\t", tabRabbitAndTurtle[i][j]);
+                } else {
+                    System.out.printf("|%s|\t", tabRabbitAndTurtle[i][j]);
+                }
             }
             System.out.println();
         }

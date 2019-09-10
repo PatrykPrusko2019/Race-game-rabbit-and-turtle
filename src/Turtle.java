@@ -65,4 +65,27 @@ public class Turtle {
         }
         return false;
     }
+
+    //turtle movement
+    public void changeOfPositionOnArrayTurtle(String[][] tabRabbitAndTurtle, Rabbit rabbit, Turtle turtle) {
+        int counter = 1;
+
+            for(int i = 0; i < tabRabbitAndTurtle.length; i++) {
+                for(int j = 0 ; j < tabRabbitAndTurtle[i].length; j++) {
+
+                    if(counter == turtle.getActualPositionTurtle()) {
+
+                        if(turtle.getActualPositionTurtle() == rabbit.getActualPositionRabbit()) {
+                            tabRabbitAndTurtle[i][j] = turtle.getTurtle() + rabbit.getRabbit();
+                        } else {
+                            tabRabbitAndTurtle[i][j] = turtle.getTurtle();
+                        }
+
+                    }
+
+                    counter++;
+                }
+            }
+
+    }
 }
